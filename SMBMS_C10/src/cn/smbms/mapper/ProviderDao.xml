@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.smbms.mapper.ProviderDao">
+
+	<select id="queryList" resultType="provider">
+		SELECT * FROM smbms_provider
+    	 <trim prefix="where" prefixOverrides="and |or">
+	      <if test="proCode!=null and proCode!=''">
+	         and proCode like concat('%',#{proCode},'%')
+	      </if>
+	      <if test="proName!=null and proName!='' ">
+	         and proName like concat ('%',#{proName},'%')
+	      </if>
+	   </trim>
+	</select>
+
+	<select id="queryById" resultType="provider" parameterType="Integer">
+		SELECT * FROM smbms_provider where id = #{1}
+	</select>
+
+	<update id="updateByProvider">
+		UPDATE smbms_provider
+		<set>
+			<if test="proCode  != null || proCode != ''"> proCode=#{proCode},</if>
+			<if test="proName  != null || proName != ''"> proName=#{proName},</if>
+			<if test="proContact  != null || proContact != ''"> proContact=#{proContact},</if>
+			<if test="proPhone  != null || proPhone != ''"> proPhone=#{proPhone},</if>
+			<if test="proAddress  != null || proAddress != ''"> proAddress=#{proAddress},</if>
+			<if test="proFax  != null || proFax != ''"> proFax=#{proFax},</if>
+			<if test="proDesc  != null || proDesc != ''"> proDesc=#{proDesc},</if>
+			<if test="modifyDate  != null || modifyDate != '' ">modifyDate=#{modifyDate},</if>
+			<if test="modifyby  != null || modifyby != '' ">modifyBy=#{modifyBy}</if>
+			where id = #{id}
+		</set>
+	</update>
+
+	<delete id="deleteByPriid" parameterType="Integer">
+		DELETE FROM
+		smbms_provider WHERE id=#{1}
+	</delete>
+
+	<insert id="addProvider" parameterType="provider">
+		INSERT INTO
+		smbms_provider(
+			proCode,proName,proDesc,proContact,proPhone,proAddress,
+			proFax,createdBy,creationDate)
+			VALUE(#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},
+			#{proFax},#{createBy},#{creationDate})
+	</insert>
+
+</mapper>
